@@ -28,7 +28,7 @@ public class Frame {
 
         d = new Draw();
         d.setBounds(0, 0, Draw.screenWidth, 800);
-        d.setVisible(false);
+        d.setVisible(true);
 
         d.addMouseListener(new ClickListener());
         frame.addKeyListener(new KeyListener());
