@@ -12,12 +12,14 @@ Télécharger la dernière release puis l'extraire. Un fois dans le dossier sour
  3. Ou alors exécutez la commande suivante : 
 	 `cd JarFile && java -jar GameOfLife-1.0-SNAPSHOT.jar`
 
+> Ce programme nécessite [Java JDK 14](https://www.oracle.com/fr/java/technologies/javase/jdk14-archive-downloads.html)
 ## Guide d'utilisation
 
 Au démarrage le jeu vous demandera d'entrer une **largeur de cellule** (qui correspond à la taille de chaque cellule) ainsi qu'une **largeur de fenêtre** (en pixels) afin de dessiner la fenêtre en conséquence.
 
 Une fois la fenêtre initialisée vous pourrez utiliser le **clic gauche** de la souris pour inverser l'état d'une cellule.
 >Une cellule vivante est représentée par une case noire.
+
 [![GIF-29-03-2021-14-13-47.gif](https://s4.gifyu.com/images/GIF-29-03-2021-14-13-47.gif)](https://gifyu.com/image/YTbf)
 
 ## Répertoire des touches
@@ -37,3 +39,5 @@ Une fois la fenêtre initialisée vous pourrez utiliser le **clic gauche** de la
  2. Autre structure "déchets sur la route"
 	
 	![GIF-29-03-2021-14-46-56.gif](https://s4.gifyu.com/images/GIF-29-03-2021-14-46-56.gif)
+
+En voir plus : [Le Jeu de la Vie](https://www.youtube.com/watch?v=S-W0NX97DB0&ab_channel=ScienceEtonnante) - ScienceEtonnante
