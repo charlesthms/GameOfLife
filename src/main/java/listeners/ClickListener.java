@@ -9,6 +9,14 @@ import java.awt.event.MouseListener;
 
 public class ClickListener extends JPanel implements MouseListener {
 
+    /**
+     * Fonction permettant de verifier si une valeur se trouve dans un interval
+     *
+     * @param i                 Valeur
+     * @param minValueInclusive Borne Inf incluse
+     * @param maxValue          Borne sup exclue
+     * @return True si minValueInclusive <= i < maxValue
+     */
     public static boolean between(int i, int minValueInclusive, int maxValue) {
         return i >= minValueInclusive && i < maxValue;
     }
@@ -16,7 +24,7 @@ public class ClickListener extends JPanel implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
 
-        if (SwingUtilities.isLeftMouseButton(e)){
+        if (SwingUtilities.isLeftMouseButton(e)) {
             for (int row = 0; row < Draw.cellCount; row++) {
                 for (int col = 0; col < Draw.cellCount; col++) {
                     if (between(e.getX(), col * Draw.cellWidth, col * Draw.cellWidth + Draw.cellWidth) &&

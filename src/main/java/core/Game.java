@@ -15,6 +15,11 @@ public class Game {
         }
     }
 
+    /**
+     * Procédure permettant d'actualiser le plateau pour la prochaine génération.
+     * <p>
+     * Utilise une copie du plateau afin de ne pas s'auto-influencer.
+     */
     public static void nextGen() {
         gen++;
         System.out.println("Génération: " + gen);
@@ -38,6 +43,12 @@ public class Game {
         board = updatedBoard;
     }
 
+
+    /**
+     * Fonction permettant d'initialiser un nouveau plateau.
+     *
+     * @return Nouveau plateau rempli de false.
+     */
     private static boolean[][] initNewBoard() {
         boolean[][] newBoard = new boolean[Draw.cellCount][Draw.cellCount];
 
@@ -50,9 +61,17 @@ public class Game {
     }
 
     public static void resetBoard() {
+        gen = 0;
         board = initNewBoard();
     }
 
+    /**
+     * Fonction permettant de compter le nombre de voisin(s) d'une cellule
+     *
+     * @param x Position x
+     * @param y Position y
+     * @return Nombre de voisin(s) de la cellule à la position (x, y)
+     */
     public static int countNeighbours(int x, int y) {
         int count = 0;
 

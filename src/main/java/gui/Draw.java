@@ -7,11 +7,13 @@ import java.awt.*;
 
 public class Draw extends JLabel {
 
-    public static int cellWidth = 20;
-    public final static int cellCount = 800 / cellWidth;
+    public static int cellWidth = Integer.parseInt(JOptionPane.showInputDialog("Largeur des cellules (DEFAULT : 20) : "));
+    public static int screenWidth = Integer.parseInt(JOptionPane.showInputDialog("Largeur de la fenêtre de jeu (DEFAULT : 817) : "));
+    public static int cellCount = screenWidth / cellWidth;;
 
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
+
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -21,9 +23,14 @@ public class Draw extends JLabel {
         repaint();
     }
 
+    /**
+     * Fonction permettant de dessiner l'état des cellules.
+     *
+     * @param g Instance du graphics
+     */
     public static void drawBoardState(Graphics g){
-        for (int row=0; row<cellCount; row++){
-            for (int col=0; col<cellCount; col++){
+        for (int row = 0; row< cellCount; row++){
+            for (int col = 0; col< cellCount; col++){
                 if (Game.board[row][col]){
                     g.setColor(new Color(0, 0, 0));
                 } else {
@@ -34,13 +41,19 @@ public class Draw extends JLabel {
         }
     }
 
+
+    /**
+     * Fonction permettant de dessiner la grille de jeu.
+     *
+     * @param g Instance du graphics
+     */
     public static void drawGrid(Graphics g){
         g.setColor(new Color(55, 55, 55));
-        for (int i = 0; i <= 800; i += cellWidth) {
+        for (int i = 0; i <= screenWidth; i += cellWidth) {
             g.drawLine(i, 0, i, 800);
         }
         for (int i = 0; i <= 800; i += cellWidth) {
-            g.drawLine(0, i, 800, i);
+            g.drawLine(0, i, screenWidth, i);
         }
     }
 

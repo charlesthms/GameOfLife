@@ -1,16 +1,19 @@
 package core;
 
+import gui.Draw;
 import gui.Frame;
+
+import javax.swing.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        Clock c = new Clock();
         Frame f = new Frame();
         Game g = new Game();
+        Clock c = new Clock();
 
-        g.setup();
         f.create();
+        g.setup();
         c.run();
     }
 }
