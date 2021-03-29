@@ -24,7 +24,7 @@ public class Frame {
         frame.setSize(Draw.screenWidth, 840); //817 x 840
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.setResizable(true);
+        frame.setResizable(false);
 
         d = new Draw();
         d.setBounds(0, 0, Draw.screenWidth, 800);
