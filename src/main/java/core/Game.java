@@ -2,11 +2,12 @@ package core;
 
 import gui.Draw;
 
+import java.awt.*;
 import java.util.Arrays;
 
 public class Game {
 
-    public static boolean[][] board = new boolean[Draw.cellCount][Draw.cellCount];
+    public static boolean[][] board = new boolean[1][1];
     public static int gen = 0;
 
     public void setup() {
