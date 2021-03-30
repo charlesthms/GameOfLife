@@ -11,6 +11,11 @@ public class Cell {
         this.state = state;
     }
 
+    public void setXY(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
     public int getX() {
         return x;
     }
@@ -19,7 +24,7 @@ public class Cell {
         return y;
     }
 
-    public boolean isState() {
+    public boolean getState() {
         return state;
     }
 }
