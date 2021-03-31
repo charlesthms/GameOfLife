@@ -14,14 +14,12 @@ import java.util.HashMap;
  */
 public class Frame extends JPanel implements ActionListener, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
-    static JFrame frame;
-    JLabel generation, speed, time, executionTime;
-    JSlider slider, source;
-
-    static int SIZE = 25;
+    private final JFrame frame;
+    private static int SIZE = 25;
     private int delay = 100;
+    private Timer timer = new Timer(delay, this);
 
-    Timer timer = new Timer(delay, this);
+    ControlPanel cp;
 
     public static void main(String[] args) {
         new Game();
@@ -29,6 +27,8 @@ public class Frame extends JPanel implements ActionListener, MouseListener, Mous
     }
 
     public Frame() {
+
+        cp = new ControlPanel(this, timer);
 
         // Ajout des listeners
         addMouseListener(this);
@@ -51,39 +51,11 @@ public class Frame extends JPanel implements ActionListener, MouseListener, Mous
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        generation = new JLabel("GENERATION: " + Game.getGen());
-        generation.setForeground(new Color(255, 255, 255));
+        // Ajout du controlPanel
+        cp.addControls();
 
-        speed = new JLabel("VITESSE: ");
-        speed.setForeground(new Color(255, 255, 255));
-
-        time = new JLabel("TEMPS DE CALCUL: ");
-        time.setForeground(new Color(255, 255, 255));
-
-        executionTime = new JLabel(Game.getExecutionTime() / 1000000 + "ms");
-        executionTime.setForeground(new Color(255, 255, 255));
-
-        slider = new JSlider();
-        slider.setOpaque(false);
-        slider.setFocusable(false);
-        slider.setPaintTicks(true);
-        slider.setVisible(true);
-        slider.addChangeListener(e -> {
-            source = (JSlider) e.getSource();
-            slider.setValue(source.getValue());
-            frame.repaint();
-            double a1 = (5000.0000 / (Math.pow(25/500.0, 1/40.0)));
-            delay = (int)(a1 * (Math.pow(25/500.0, slider.getValue() / 40.0)));
-            timer.setDelay(delay);
-        });
-
-
-        frame.add(slider);
-        this.add(generation);
-        this.add(speed);
-        this.add(time);
-        this.add(executionTime);
         this.setLayout(null);
+        frame.setLayout(null);
 
         frame.revalidate();
         frame.repaint();
@@ -105,24 +77,11 @@ public class Frame extends JPanel implements ActionListener, MouseListener, Mous
             }
         }
 
+        // Dessin du controlPanel
         g.setColor(new Color(0, 0, 0, 119));
         g.fillRect(10, getHeight() - 80, 250, 70);
+        cp.paintControls(getHeight());
 
-        slider.setBounds(10, getHeight() - 50, 100, 70);
-
-        generation.setBounds(15, getHeight() - 100, 200, 70);
-        generation.setText("GENERATION: " + Game.getGen());
-
-        speed.setBounds(20, getHeight() - 80, 200, 70);
-        speed.setText("VITESSE: " + slider.getValue());
-
-        time.setBounds(130, getHeight() - 100, 200, 70);
-        time.setText("TEMPS DE CALCUL: ");
-        executionTime.setBounds(130, getHeight() - 80, 200, 70);
-        executionTime.setText(Game.getExecutionTime() / 1000000 + "ms");
-
-        this.setLayout(null);
-        this.add(generation);
     }
 
     public void cellsManagement(MouseEvent e) {
@@ -150,8 +109,19 @@ public class Frame extends JPanel implements ActionListener, MouseListener, Mous
     @Override
     public void actionPerformed(ActionEvent e) {
         // Actualisation pour la prochaine génération
-        Game.nextGen(getWidth(), getHeight());
-        repaint();
+        if (e.getActionCommand() != null) {
+            // Action d'un des boutons
+            if (e.getActionCommand().equalsIgnoreCase("start") || e.getActionCommand().equalsIgnoreCase("pause")) {
+                buttonManage();
+            } else if (e.getActionCommand().equalsIgnoreCase("reset")) {
+                resetFrame();
+            }
+
+        } else {
+
+            Game.nextGen(getWidth(), getHeight());
+            repaint();
+        }
     }
 
     @Override
@@ -165,27 +135,30 @@ public class Frame extends JPanel implements ActionListener, MouseListener, Mous
         char key = e.getKeyChar();
 
         if (key == 'r') {
-            timer.stop();
-            Game.gen = 0;
-            Game.getHashCells().clear();
-            repaint();
-            System.out.println("FRAME CLEARED");
+            resetFrame();
         } else if (key == 'x') {
             // Fermeture de la fenêtre
             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-        } else if (key == KeyEvent.VK_SPACE && !timer.isRunning()) {
-            // Allumer le timer
-            System.out.println("GENERATION STARTED");
-            timer.start();
-        } else if (key == KeyEvent.VK_SPACE && timer.isRunning()) {
-            // Éteindre le timer
-            System.out.println("GENERATION PAUSED");
-            timer.stop();
+        } else if (key == KeyEvent.VK_SPACE) {
+            buttonManage();
         } else if (key == 't') {
+            // Changement manuel de la vitesse
             timer.stop();
             delay = Integer.parseInt(JOptionPane.showInputDialog("Nouvelle vitesse (en ms) : "));
             timer.setDelay(delay);
             timer.restart();
+        }
+    }
+
+    private void buttonManage() {
+        if (cp.getStart().getText().equalsIgnoreCase("start")) {
+            System.out.println("GENERATION STARTED");
+            timer.start();
+            cp.start.setText("Pause");
+        } else {
+            System.out.println("GENERATION PAUSED");
+            timer.stop();
+            cp.start.setText("Start");
         }
     }
 
@@ -258,11 +231,19 @@ public class Frame extends JPanel implements ActionListener, MouseListener, Mous
         repaint();
     }
 
+    public void resetFrame() {
+        timer.stop();
+        Game.gen = 0;
+        Game.getHashCells().clear();
+        repaint();
+        System.out.println("FRAME CLEARED");
+    }
+
     public static int getSIZE() {
         return SIZE;
     }
 
-    public void setSpeed(int speed){
-        this.delay = speed;
+    public Timer getTimer() {
+        return timer;
     }
 }
