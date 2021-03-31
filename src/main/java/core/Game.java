@@ -10,6 +10,8 @@ public class Game {
     public static int gen = 0;
     private static HashMap<Point, Cell> hashCells;
 
+    private static long executionTime = 0;
+
     public Game() {
 
         hashCells = new HashMap<>();
@@ -63,7 +65,7 @@ public class Game {
         hashCells = new HashMap<>(copy);
 
         long endTime = System.nanoTime();
-        long executionTime = endTime - startTime;
+        executionTime = endTime - startTime;
         System.out.println("Temps d'exécution: " + executionTime / 1000000 + "ms");
     }
 
@@ -102,6 +104,10 @@ public class Game {
 
     public static int getGen(){
         return gen;
+    }
+
+    public static long getExecutionTime() {
+        return executionTime;
     }
 
 }

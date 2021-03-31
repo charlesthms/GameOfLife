@@ -4,8 +4,6 @@ import core.Cell;
 import core.Game;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
@@ -17,7 +15,8 @@ import java.util.HashMap;
 public class Frame extends JPanel implements ActionListener, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
     static JFrame frame;
-    JLabel generation;
+    JLabel generation, speed, time, executionTime;
+    JSlider slider, source;
 
     static int SIZE = 25;
     private int delay = 100;
@@ -54,8 +53,37 @@ public class Frame extends JPanel implements ActionListener, MouseListener, Mous
 
         generation = new JLabel("GENERATION: " + Game.getGen());
         generation.setForeground(new Color(255, 255, 255));
-        this.setLayout(null);
+
+        speed = new JLabel("VITESSE: ");
+        speed.setForeground(new Color(255, 255, 255));
+
+        time = new JLabel("TEMPS DE CALCUL: ");
+        time.setForeground(new Color(255, 255, 255));
+
+        executionTime = new JLabel(Game.getExecutionTime() / 1000000 + "ms");
+        executionTime.setForeground(new Color(255, 255, 255));
+
+        slider = new JSlider();
+        slider.setOpaque(false);
+        slider.setFocusable(false);
+        slider.setPaintTicks(true);
+        slider.setVisible(true);
+        slider.addChangeListener(e -> {
+            source = (JSlider) e.getSource();
+            slider.setValue(source.getValue());
+            frame.repaint();
+            double a1 = (5000.0000 / (Math.pow(25/500.0, 1/40.0)));
+            delay = (int)(a1 * (Math.pow(25/500.0, slider.getValue() / 40.0)));
+            timer.setDelay(delay);
+        });
+
+
+        frame.add(slider);
         this.add(generation);
+        this.add(speed);
+        this.add(time);
+        this.add(executionTime);
+        this.setLayout(null);
 
         frame.revalidate();
         frame.repaint();
@@ -78,11 +106,20 @@ public class Frame extends JPanel implements ActionListener, MouseListener, Mous
         }
 
         g.setColor(new Color(0, 0, 0, 119));
-        g.fillRect(10, getHeight() - 80, 200, 70);
+        g.fillRect(10, getHeight() - 80, 250, 70);
 
+        slider.setBounds(10, getHeight() - 50, 100, 70);
 
         generation.setBounds(15, getHeight() - 100, 200, 70);
         generation.setText("GENERATION: " + Game.getGen());
+
+        speed.setBounds(20, getHeight() - 80, 200, 70);
+        speed.setText("VITESSE: " + slider.getValue());
+
+        time.setBounds(130, getHeight() - 100, 200, 70);
+        time.setText("TEMPS DE CALCUL: ");
+        executionTime.setBounds(130, getHeight() - 80, 200, 70);
+        executionTime.setText(Game.getExecutionTime() / 1000000 + "ms");
 
         this.setLayout(null);
         this.add(generation);
