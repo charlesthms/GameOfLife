@@ -15,18 +15,22 @@ Télécharger la dernière release puis l'extraire. Un fois dans le dossier sour
 > Ce programme nécessite [Java JDK 14](https://www.oracle.com/fr/java/technologies/javase/jdk14-archive-downloads.html)
 ## Guide d'utilisation
 
-Au démarrage le jeu vous demandera d'entrer une **largeur de cellule** (qui correspond à la taille de chaque cellule) ainsi qu'une **largeur de fenêtre** (en pixels) afin de dessiner la fenêtre en conséquence.
+Une fois le jeu lancé vous pouvez ajuster la fenêtre de jeu à votre convenance. Vous pouvez zoomer et dézoomer à l'aide de la molette de votre souris.
 
-Une fois la fenêtre initialisée vous pourrez utiliser le **clic gauche** de la souris pour inverser l'état d'une cellule.
+Une fois la fenêtre initialisée vous pourrez utiliser le **clic gauche** de la souris pour créer une cellule vivante et le **clic droit** pour supprimer une cellule vivante.
 >Une cellule vivante est représentée par une case noire.
 
 [![GIF-29-03-2021-14-13-47.gif](https://s4.gifyu.com/images/GIF-29-03-2021-14-13-47.gif)](https://gifyu.com/image/YTbf)
 
 ## Répertoire des touches
 
-| [SPACE] | [T] | [X] | [R] | [Left Click] | [Right Click] |
-|----|---|---|---|---|---|
-| Activer / Désactiver la génération automatique | Changer la vitesse de génération  | Fermer le programme | Réinitialiser le jeu | Inverser l'état d'une cellule | Génération manuelle d'un tour |
+| Touche | Action | 
+|----|---|
+| [ESPACE] | Lancer la génération automatique  |
+| [T] | Changer la vitesse de génération manuellement |
+| [R] | Réinitialiser toutes les cellules |
+| [X] | Quitter le jeu |
+
 
 >Il est préférable de stopper la génération automatique avant de réinitialiser le jeu. 
 

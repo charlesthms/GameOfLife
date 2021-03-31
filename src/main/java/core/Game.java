@@ -1,18 +1,34 @@
 package core;
 
-import gui.Draw;
+import gui.Frame;
 
-import java.util.Arrays;
+import java.awt.*;
+import java.util.HashMap;
 
 public class Game {
 
-    public static boolean[][] board = new boolean[Draw.cellCount][Draw.cellCount];
     public static int gen = 0;
+    private static HashMap<Point, Cell> hashCells;
 
-    public void setup() {
-        for (boolean[] row : board) {
-            Arrays.fill(row, false);
-        }
+    private static long executionTime = 0;
+
+    public Game() {
+
+        hashCells = new HashMap<>();
+
+    }
+
+    public static void createCell(int x, int y) {
+        hashCells.put(new Point(x, y), new Cell(x, y, true));
+    }
+
+    public static void killCell(int x, int y) {
+        hashCells.remove(new Point(x, y));
+    }
+
+
+    public static Cell getCellFromPos(int x, int y) {
+        return hashCells.get(new Point(x, y));
     }
 
     /**
@@ -20,50 +36,39 @@ public class Game {
      * <p>
      * Utilise une copie du plateau afin de ne pas s'auto-influencer.
      */
-    public static void nextGen() {
+    public static void nextGen(int width, int height) {
+        long startTime = System.nanoTime();
+
         gen++;
         System.out.println("Génération: " + gen);
 
-        boolean[][] updatedBoard = initNewBoard();
+        HashMap<Point, Cell> copy = new HashMap<>();
 
-        for (int y = 0; y < Draw.cellCount; y++) {
-            for (int x = 0; x < Draw.cellCount; x++) {
+        for (int y = 0; y < height; y += Frame.getSIZE()) {
+            for (int x = 0; x < width; x += Frame.getSIZE()) {
 
                 int n = countNeighbours(x, y);
 
-                if (n == 3 && !board[y][x]) {
-                    updatedBoard[y][x] = true;
-                } else if (n < 2 || n > 3) {
-                    updatedBoard[y][x] = false;
+                if (n == 3 && getCellFromPos(x, y) == null) {
+                    // La cellule à 3 voisins et n'est pas vivante
+                    copy.put(new Point(x, y), new Cell(x, y, true));
+                } else if (n < 2 || n > 3 && getCellFromPos(x, y) != null) {
+                    // Si la cellule existe et à moins et 2 ou plus de 3 voisins
+                    copy.remove(new Point(x, y));
                 } else {
-                    updatedBoard[y][x] = board[y][x];
+                    // Sinon, si la cellule est vivante, on la conserve
+                    Point currentPoint = new Point(x, y);
+                    if (getCellFromPos(x, y) != null) copy.put(currentPoint, new Cell(x, y, true));
                 }
             }
         }
-        board = updatedBoard;
+        hashCells = new HashMap<>(copy);
+
+        long endTime = System.nanoTime();
+        executionTime = endTime - startTime;
+        System.out.println("Temps d'exécution: " + executionTime / 1000000 + "ms");
     }
 
-
-    /**
-     * Fonction permettant d'initialiser un nouveau plateau.
-     *
-     * @return Nouveau plateau rempli de false.
-     */
-    private static boolean[][] initNewBoard() {
-        boolean[][] newBoard = new boolean[Draw.cellCount][Draw.cellCount];
-
-        for (int i = 0; i < Draw.cellCount; i++) {
-            for (int j = 0; j < Draw.cellCount; j++) {
-                newBoard[i][j] = false;
-            }
-        }
-        return newBoard;
-    }
-
-    public static void resetBoard() {
-        gen = 0;
-        board = initNewBoard();
-    }
 
     /**
      * Fonction permettant de compter le nombre de voisin(s) d'une cellule
@@ -75,10 +80,10 @@ public class Game {
     public static int countNeighbours(int x, int y) {
         int count = 0;
 
-        for (int yoff = y - 1; yoff <= y + 1; yoff++) {
-            for (int xoff = x - 1; xoff <= x + 1; xoff++) {
+        for (int yoff = y - Frame.getSIZE(); yoff <= y + Frame.getSIZE(); yoff += Frame.getSIZE()) {
+            for (int xoff = x - Frame.getSIZE(); xoff <= x + Frame.getSIZE(); xoff += Frame.getSIZE()) {
                 try {
-                    if (board[yoff][xoff] && !(xoff == x && yoff == y)) {
+                    if (getCellFromPos(xoff, yoff) != null && !(xoff == x && yoff == y)) {
                         count++;
                     }
                 } catch (Exception ignored) {
@@ -87,6 +92,22 @@ public class Game {
             }
         }
         return count;
+    }
+
+    public static HashMap<Point, Cell> getHashCells() {
+        return hashCells;
+    }
+
+    public static void updateHashCells(HashMap<Point, Cell> hashmap){
+        hashCells = new HashMap<>(hashmap);
+    }
+
+    public static int getGen(){
+        return gen;
+    }
+
+    public static long getExecutionTime() {
+        return executionTime;
     }
 
 }

@@ -17,7 +17,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>core.Main</mainClass>
+                            <mainClass>gui.Frame</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
